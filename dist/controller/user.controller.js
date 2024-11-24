@@ -41,9 +41,7 @@ class UserController {
     }
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("ENTRAAAAA");
             const { username, password } = req.body;
-            console.log(req.body);
             const jwtService = new jwt_service_1.JwtService(); // Instanciar el servicio JWT
             try {
                 const userService = new user_service_1.UserService();

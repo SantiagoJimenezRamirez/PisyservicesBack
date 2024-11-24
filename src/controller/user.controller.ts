@@ -32,9 +32,7 @@ export class UserController {
     }
 
     async login(req: Request, res:Response){
-        console.log("ENTRAAAAA")
         const { username, password } = req.body;
-        console.log(req.body)
 
         const jwtService = new JwtService(); // Instanciar el servicio JWT
 

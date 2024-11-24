@@ -18,13 +18,16 @@ const cors_1 = __importDefault(require("cors"));
 const user_router_1 = __importDefault(require("../router/user.router"));
 const user_model_1 = __importDefault(require("../model/user.model"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const session_model_1 = __importDefault(require("../model/session.model"));
+const session_router_1 = __importDefault(require("../router/session.router"));
 // Cargar variables del archivo .env
 dotenv_1.default.config();
 class Server {
     constructor() {
         this.syncDatabase = () => __awaiter(this, void 0, void 0, function* () {
             try {
-                yield user_model_1.default.sync({ force: false }); // Usa `force: true` para eliminar tablas existentes y recrearlas
+                yield user_model_1.default.sync({ force: false });
+                yield session_model_1.default.sync({ force: false });
                 // await Product.sync({ force: false });  // Usa `force: true` para eliminar tablas existentes y recrearlas
                 console.log("Tablas sincronizadas exitosamente");
             }
@@ -46,6 +49,7 @@ class Server {
     }
     routes() {
         this.app.use('/app/user', user_router_1.default);
+        this.app.use('/app/session', session_router_1.default);
         //   this.app.use('/product', routerProduct)
     }
     middlewares() {
