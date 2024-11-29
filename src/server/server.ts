@@ -5,6 +5,10 @@ import User from '../model/user.model';
 import dotenv from 'dotenv';
 import Session from '../model/session.model';
 import routerSession from '../router/session.router';
+import routerProduct from '../router/product.router';
+import Product from '../model/product.model';
+import Category from '../model/category.model';
+import routerCategory from '../router/category.router';
 
 // Cargar variables del archivo .env
 dotenv.config();
@@ -32,7 +36,8 @@ export class Server {
 routes(){
   this.app.use('/app/user', routerUser)
   this.app.use('/app/session', routerSession)
-//   this.app.use('/product', routerProduct)
+  this.app.use('/app/product', routerProduct)
+  this.app.use('/app/category', routerCategory)
 }
 
 middlewares() {
@@ -48,6 +53,8 @@ syncDatabase = async () => {
   try {
     await User.sync({ force: false });  
     await Session.sync({ force: false }); 
+    await Product.sync({ force: false });
+    await Category.sync({ force: false })
     // await Product.sync({ force: false });  // Usa `force: true` para eliminar tablas existentes y recrearlas
     console.log("Tablas sincronizadas exitosamente");
   } catch (error) {

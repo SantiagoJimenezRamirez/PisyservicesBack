@@ -20,6 +20,10 @@ const user_model_1 = __importDefault(require("../model/user.model"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const session_model_1 = __importDefault(require("../model/session.model"));
 const session_router_1 = __importDefault(require("../router/session.router"));
+const product_router_1 = __importDefault(require("../router/product.router"));
+const product_model_1 = __importDefault(require("../model/product.model"));
+const category_model_1 = __importDefault(require("../model/category.model"));
+const category_router_1 = __importDefault(require("../router/category.router"));
 // Cargar variables del archivo .env
 dotenv_1.default.config();
 class Server {
@@ -28,6 +32,8 @@ class Server {
             try {
                 yield user_model_1.default.sync({ force: false });
                 yield session_model_1.default.sync({ force: false });
+                yield product_model_1.default.sync({ force: false });
+                yield category_model_1.default.sync({ force: false });
                 // await Product.sync({ force: false });  // Usa `force: true` para eliminar tablas existentes y recrearlas
                 console.log("Tablas sincronizadas exitosamente");
             }
@@ -50,7 +56,8 @@ class Server {
     routes() {
         this.app.use('/app/user', user_router_1.default);
         this.app.use('/app/session', session_router_1.default);
-        //   this.app.use('/product', routerProduct)
+        this.app.use('/app/product', product_router_1.default);
+        this.app.use('/app/category', category_router_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());
