@@ -41,9 +41,15 @@ export class ProductService {
     try {
       const product = await Product.findByPk(id);
       if (!product) {
+        console.warn(`Product with ID ${id} not found.`);
         return null;
       }
-
+  
+      // Validar los datos de entrada
+      if (!productData.name || !productData.price || !productData.description) {
+        throw new Error("Missing required fields");
+      }
+  
       await product.update(productData);
       return product;
     } catch (error) {

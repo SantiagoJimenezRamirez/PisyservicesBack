@@ -15,7 +15,8 @@ class CategoryController {
     constructor() { }
     add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name } = req.body;
+            console.log(req.body);
+            const name = req.body.category;
             try {
                 const categoryService = new category_service_1.CategoryService();
                 const category = yield categoryService.add({ name });
@@ -31,6 +32,12 @@ class CategoryController {
             }
             catch (error) {
                 console.error("Error creating category:", error);
+                // Manejo específico de errores de unicidad
+                if (error.name === "SequelizeUniqueConstraintError") {
+                    return res.status(409).json({
+                        message: "Category already exists.",
+                    });
+                }
                 return res.status(500).json({
                     message: "An error occurred while creating the category.",
                 });
@@ -81,8 +88,9 @@ class CategoryController {
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
             const { id } = req.params;
-            const { name } = req.body;
+            const name = req.body.category;
             try {
                 const categoryService = new category_service_1.CategoryService();
                 const updatedCategory = yield categoryService.update(Number(id), { name });

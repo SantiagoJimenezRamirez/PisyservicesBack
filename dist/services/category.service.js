@@ -20,12 +20,18 @@ class CategoryService {
     add(categoryData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const category = yield category_model_1.default.create(categoryData);
+                const [category, created] = yield category_model_1.default.findOrCreate({
+                    where: { name: categoryData.name },
+                    defaults: categoryData, // Incluye otros datos si es necesario
+                });
+                if (!created) {
+                    console.log("Category already exists:", category);
+                }
                 return category;
             }
             catch (error) {
                 console.error("Error creating category:", error);
-                throw new Error("Error creating category");
+                throw error; // Lanza el error para que el controlador lo maneje
             }
         });
     }

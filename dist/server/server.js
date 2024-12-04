@@ -24,6 +24,9 @@ const product_router_1 = __importDefault(require("../router/product.router"));
 const product_model_1 = __importDefault(require("../model/product.model"));
 const category_model_1 = __importDefault(require("../model/category.model"));
 const category_router_1 = __importDefault(require("../router/category.router"));
+const services_router_1 = __importDefault(require("../router/services.router"));
+const service_model_1 = require("../model/service.model");
+const path_1 = __importDefault(require("path"));
 // Cargar variables del archivo .env
 dotenv_1.default.config();
 class Server {
@@ -34,6 +37,7 @@ class Server {
                 yield session_model_1.default.sync({ force: false });
                 yield product_model_1.default.sync({ force: false });
                 yield category_model_1.default.sync({ force: false });
+                yield service_model_1.ServiceRequest.sync({ force: false });
                 // await Product.sync({ force: false });  // Usa `force: true` para eliminar tablas existentes y recrearlas
                 console.log("Tablas sincronizadas exitosamente");
             }
@@ -58,8 +62,11 @@ class Server {
         this.app.use('/app/session', session_router_1.default);
         this.app.use('/app/product', product_router_1.default);
         this.app.use('/app/category', category_router_1.default);
+        this.app.use('/app/services', services_router_1.default);
     }
     middlewares() {
+        // Sirve los archivos estáticos desde la carpeta dist/src/uploads
+        this.app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '../uploads')));
         this.app.use(express_1.default.json());
         const corsOptions = {
             origin: 'http://localhost:4200',

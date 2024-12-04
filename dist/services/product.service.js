@@ -61,7 +61,12 @@ class ProductService {
             try {
                 const product = yield product_model_1.default.findByPk(id);
                 if (!product) {
+                    console.warn(`Product with ID ${id} not found.`);
                     return null;
+                }
+                // Validar los datos de entrada
+                if (!productData.name || !productData.price || !productData.description) {
+                    throw new Error("Missing required fields");
                 }
                 yield product.update(productData);
                 return product;

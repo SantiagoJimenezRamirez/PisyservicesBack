@@ -5,15 +5,24 @@ export class CategoryService {
     constructor() {}
 
     // Crea una nueva categoría
-    async add(categoryData: { name: string }) {
+    async add(categoryData: any) {
         try {
-            const category = await Category.create(categoryData);
+            const [category, created] = await Category.findOrCreate({
+                where: { name: categoryData.name },
+                defaults: categoryData, // Incluye otros datos si es necesario
+            });
+    
+            if (!created) {
+                console.log("Category already exists:", category);
+            }
+    
             return category;
         } catch (error) {
             console.error("Error creating category:", error);
-            throw new Error("Error creating category");
+            throw error; // Lanza el error para que el controlador lo maneje
         }
     }
+    
 
     // Obtiene todas las categorías
     async getAll() {

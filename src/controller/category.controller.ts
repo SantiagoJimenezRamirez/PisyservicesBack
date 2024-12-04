@@ -5,29 +5,39 @@ export class CategoryController {
     constructor() {}
 
     async add(req: Request, res: Response) {
-        const { name } = req.body;
-
+        console.log(req.body);
+        const name = req.body.category;
+    
         try {
             const categoryService = new CategoryService();
             const category = await categoryService.add({ name });
-
+    
             if (!category) {
                 return res.status(400).json({
                     msg: "Invalid Category",
                 });
             }
-
+    
             return res.status(201).json({
                 message: "Category created successfully!",
                 category,
             });
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error creating category:", error);
+    
+            // Manejo específico de errores de unicidad
+            if (error.name === "SequelizeUniqueConstraintError") {
+                return res.status(409).json({
+                    message: "Category already exists.",
+                });
+            }
+    
             return res.status(500).json({
                 message: "An error occurred while creating the category.",
             });
         }
     }
+    
 
     async getAll(req: Request, res: Response) {
         try {
@@ -72,8 +82,9 @@ export class CategoryController {
     }
 
     async update(req: Request, res: Response) {
+        console.log(req.body)
         const { id } = req.params;
-        const { name } = req.body;
+        const name = req.body.category;
 
         try {
             const categoryService = new CategoryService();

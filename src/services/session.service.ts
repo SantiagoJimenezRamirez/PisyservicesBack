@@ -14,7 +14,9 @@ export class SessionService {
 
     async getAll(){
       try {
-        const sessions = await Session.findAll()
+        const sessions = await Session.findAll({
+          order: [['createdAt', 'DESC']],
+        })
         return sessions
       } catch (error) {
         console.error('Error find session:', error);

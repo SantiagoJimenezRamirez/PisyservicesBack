@@ -30,7 +30,9 @@ class SessionService {
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const sessions = yield session_model_1.default.findAll();
+                const sessions = yield session_model_1.default.findAll({
+                    order: [['createdAt', 'DESC']],
+                });
                 return sessions;
             }
             catch (error) {
